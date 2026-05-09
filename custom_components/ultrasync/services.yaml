@@ -9,15 +9,6 @@ stay:
 disarm:
   description: Set Alarm to Disarmed
 
-fire:
-  description: Set Alarm to Fire Alarm
-
-medical:
-  description: Set Alarm to Medical Alarm
-
-panic:
-  description: Set Alarm to Panic Alarm
-
 bypass:
   description: Bypass a zone
   fields:
