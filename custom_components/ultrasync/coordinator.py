@@ -31,7 +31,6 @@ class UltraSyncDataUpdateCoordinator(DataUpdateCoordinator):
         self._area_delta = {}
         self._zone_delta = {}
         self._output_delta = {}
-        self._history_delta = {}
 
         update_interval = timedelta(seconds=options[CONF_SCAN_INTERVAL])
 
@@ -60,7 +59,6 @@ class UltraSyncDataUpdateCoordinator(DataUpdateCoordinator):
                 details["areas"],
                 details["zones"],
                 details["outputs"],
-                details["history_data"]
             )
 
             # Process zone data
@@ -82,24 +80,6 @@ class UltraSyncDataUpdateCoordinator(DataUpdateCoordinator):
                 response["zone{:0>2}_state".format(zone["bank"] + 1)] = zone[
                     "status"
                 ]
-
-            # Process history data (if present)
-            for history in details["history_data"]:
-                history_name = history["area_name"]
-                sensor_id = "history_name{}state".format(history_name)
-                state_value = "{} by {} at {}".format(history["action"], history["user"], history["timestamp"])
-                response[sensor_id] = state_value
-
-                # Fire event to get initial state
-                self.hass.bus.fire(
-                    "ultrasync_history_update",
-                    {
-                        "name": history_name,
-                        "status": history["action"],
-                        "timestamp": history["timestamp"],
-                        "user": history["user"],
-                    },
-                )
 
             # Process area data
             for area in details["areas"]:
